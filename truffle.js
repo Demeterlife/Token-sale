@@ -18,7 +18,8 @@ module.exports = {
     ropsten_parity: {
       host: "localhost",
       port: 9545,
-      network_id: 3
+      network_id: 3,
+      gas: 5500000
     },
     ropsten_geth: {
       host: "localhost",
