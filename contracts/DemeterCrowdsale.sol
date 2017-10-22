@@ -50,8 +50,7 @@ contract DemeterCrowdsale is
   /**
    * @dev Address to which the release tokens are credited.
    */
-  // FIXME: use real wallet address
-  address constant public RELEASE_WALLET = 0x9a3EF57F54c61C84D84620dDd4775Ca633485CCF;
+  address constant public RELEASE_WALLET = 0x70323222694584c68BD5a29194bb72c248e715F7;
 
   /**
    * Portion of total tokens reserved for dev. team.
@@ -61,8 +60,7 @@ contract DemeterCrowdsale is
   /**
    * @dev Address to which the dev. tokens are credited.
    */
-  // FIXME: use real wallet address
-  address constant public DEV_WALLET = 0xd9a58BDEA8858BFb65592E85381958C5bbf22089;
+  address constant public DEV_WALLET = 0x867D85437d27cA97e1EB574250efbba487aca637;
 
   /**
    * Portion of total tokens reserved for business dev.
@@ -72,8 +70,7 @@ contract DemeterCrowdsale is
   /**
    * @dev Address to which the business dev. tokens are credited.
    */
-  // FIXME: use real wallet address
-  address constant public BIZDEV_WALLET = 0xC276885bC1d6DDE54249CC7DF8b1072f49DD1F39;
+  address constant public BIZDEV_WALLET = 0xdc47494e7B58E0C8845Ae0670F7647Bed621Eb18;
 
   /**
    * @dev Event fired whenever company tokens are issued for a purchase.
