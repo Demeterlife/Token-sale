@@ -1,0 +1,1 @@
+solidity_flattener.py ../contracts/DemeterCrowdsale.sol --output ../flat/DemeterCrowdsale.sol

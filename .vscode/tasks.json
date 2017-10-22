@@ -1,0 +1,25 @@
+{
+    // Truffle tasks for Visual Studio Code
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "truffle",
+    "isShellCommand": true,
+    "args": [],
+    "showOutput": "always",
+    "echoCommand": true,
+    "tasks": [
+        {
+            "taskName": "compile"
+        },
+        {
+            "taskName": "build"
+        },
+        {
+            "taskName": "migrate"
+        },
+        {
+            "taskName": "console"
+        }
+    ]
+}
