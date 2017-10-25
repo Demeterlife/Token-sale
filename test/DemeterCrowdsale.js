@@ -39,10 +39,10 @@ contract('DemeterCrowdsale', function ([
   const PERC_TOKENS_TO_DEV = 20;
   const PERC_TOKENS_TO_BIZDEV = 25;
 
-  const WALLET = "0x54e8c175e86ed0c6e676936f514a8180d9ef6fc3"; // multi-sig wallet
-  const RELEASE_WALLET = "0x9a3EF57F54c61C84D84620dDd4775Ca633485CCF";
-  const DEV_WALLET = "0xd9a58BDEA8858BFb65592E85381958C5bbf22089";
-  const BIZDEV_WALLET = "0xC276885bC1d6DDE54249CC7DF8b1072f49DD1F39";
+  const WALLET = "0x18061456803b185583C84780C55e667BC7B71F7D".toLowerCase(); // multi-sig wallet
+  const RELEASE_WALLET = "0x70323222694584c68BD5a29194bb72c248e715F7".toLowerCase();
+  const DEV_WALLET = "0x867D85437d27cA97e1EB574250efbba487aca637".toLowerCase();
+  const BIZDEV_WALLET = "0xdc47494e7B58E0C8845Ae0670F7647Bed621Eb18".toLowerCase();
 
   const REFCODE1 = "REFCODE1";
   const REFCODE2 = "REFCODE2";
@@ -342,7 +342,7 @@ contract('DemeterCrowdsale', function ([
       const releaseTokens = actualCompanyTokens.sub(bizDevTokens).sub(devTokens);
       event.args.amount.should.be.bignumber.equal(actualCompanyTokens);
     });
-    
+
     it('should send event CompanyTokensIssued after the whitelist period for normal purchase', async function () {
       await increaseTimeTo(this.afterWhiteListEndTime);
       const { logs } = await this.crowdsale.sendTransaction({ value: INVESTED_AMOUNT, from: normalInvestor });
@@ -362,7 +362,7 @@ contract('DemeterCrowdsale', function ([
       const totalTokens = EXPECTED_TOKEN_AMOUNT.add(companyTokens);
       const bonusTokens = EXPECTED_TOKEN_AMOUNT.mul(WHITELIST_BONUS_RATE).div(100);
       tokenBalance.should.be.bignumber.equal(EXPECTED_TOKEN_AMOUNT.add(bonusTokens));
-      
+
       const devTokens = totalTokens.mul(PERC_TOKENS_TO_DEV).div(100);
       const devTokenBalance = await this.token.balanceOf(DEV_WALLET);
       devTokenBalance.should.be.bignumber.equal(devTokens);
@@ -410,7 +410,7 @@ contract('DemeterCrowdsale', function ([
       const totalTokens = EXPECTED_TOKEN_AMOUNT.add(companyTokens);
       const bonusTokens = EXPECTED_TOKEN_AMOUNT.mul(WHITELIST_BONUS_RATE / 2).div(100);
       tokenBalance.should.be.bignumber.equal(EXPECTED_TOKEN_AMOUNT.add(bonusTokens));
-      
+
       const devTokens = totalTokens.mul(PERC_TOKENS_TO_DEV).div(100);
       const devTokenBalance = await this.token.balanceOf(DEV_WALLET);
       devTokenBalance.should.be.bignumber.equal(devTokens);
@@ -435,7 +435,7 @@ contract('DemeterCrowdsale', function ([
       const investorBonusTokens = EXPECTED_TOKEN_AMOUNT.mul(REFERRAL_BONUS_RATE / 2).div(100);
       tokenBalance.should.be.bignumber.equal(EXPECTED_TOKEN_AMOUNT.add(investorBonusTokens));
       const totalBonusTokens = EXPECTED_TOKEN_AMOUNT.mul(REFERRAL_BONUS_RATE).div(100);
-      
+
       const devTokens = totalTokens.mul(PERC_TOKENS_TO_DEV).div(100);
       const devTokenBalance = await this.token.balanceOf(DEV_WALLET);
       devTokenBalance.should.be.bignumber.equal(devTokens);
@@ -617,20 +617,20 @@ contract('DemeterCrowdsale', function ([
     });
 
     it('should not allow addition to the whitelist after the whitelist registration period', async function () {
-        await increaseTimeTo(this.afterWhiteListRegistrationEndTime);
-        await this.crowdsale.addWhiteListedInvestor(nonWhiteListedInvestor, REFCODE2).should.be.rejectedWith(EVMThrow);
+      await increaseTimeTo(this.afterWhiteListRegistrationEndTime);
+      await this.crowdsale.addWhiteListedInvestor(nonWhiteListedInvestor, REFCODE2).should.be.rejectedWith(EVMThrow);
     });
 
     it('should not allow addition of 0x0 address', async function () {
-        await this.crowdsale.addWhiteListedInvestor(0, REFCODE2).should.be.rejectedWith(EVMThrow);
+      await this.crowdsale.addWhiteListedInvestor(0, REFCODE2).should.be.rejectedWith(EVMThrow);
     });
 
     it('should not allow addition of already whitelisted investor', async function () {
-        await this.crowdsale.addWhiteListedInvestor(whiteListedInvestor, REFCODE1).should.be.rejectedWith(EVMThrow);
+      await this.crowdsale.addWhiteListedInvestor(whiteListedInvestor, REFCODE1).should.be.rejectedWith(EVMThrow);
     });
 
     it('should not allow adding already used referral code', async function () {
-        await this.crowdsale.addWhiteListedInvestor(nonWhiteListedInvestor, REFCODE1).should.be.rejectedWith(EVMThrow);
+      await this.crowdsale.addWhiteListedInvestor(nonWhiteListedInvestor, REFCODE1).should.be.rejectedWith(EVMThrow);
     });
 
     it('should reject payments from whitelisted investor before start', async function () {
@@ -842,6 +842,41 @@ contract('DemeterCrowdsale', function ([
 
     it('should disallow anyone but the owner from taking over ownership', async function () {
       await this.crowdsale.transferOwnership(otherAddress).should.be.rejectedWith(EVMThrow);
+    });
+
+  });
+
+  describe('Destructible', function () {
+
+    it('should be destructible by the owner while the vault is active', async function () {
+      await increaseTimeTo(this.startTime);
+      await this.crowdsale.destroy({ from: owner }).should.be.fulfilled;
+    });
+
+    it('should send funds to the wallet when destroyed', async function () {
+      await increaseTimeTo(this.startTime);
+      await this.crowdsale.sendTransaction({ from: whiteListedInvestor, value: INVESTED_AMOUNT });
+      const beforeDestruction = web3.eth.getBalance(WALLET);
+      // Set gasPrice to 0 in case owner == WALLET 
+      await this.crowdsale.destroy({ from: owner, gasPrice: 0 }).should.be.fulfilled;
+      const afterDestruction = web3.eth.getBalance(WALLET);
+      afterDestruction.minus(beforeDestruction).should.be.bignumber.equal(INVESTED_AMOUNT);
+    });
+
+    it('should not be destructible while the vault is closed', async function () {
+      await increaseTimeTo(this.startTime);
+      await this.crowdsale.send(GOAL);
+      await increaseTimeTo(this.afterEndTime);
+      await this.crowdsale.finalize({ from: owner });
+      await this.crowdsale.destroy({ from: owner }).should.be.rejectedWith(EVMThrow);
+    });
+
+    it('should not be destructible while the vault is refunding', async function () {
+      await increaseTimeTo(this.startTime);
+      await this.crowdsale.send(LESS_THAN_GOAL);
+      await increaseTimeTo(this.afterEndTime);
+      await this.crowdsale.finalize({ from: owner });
+      await this.crowdsale.destroy({ from: owner }).should.be.rejectedWith(EVMThrow);
     });
 
   });
