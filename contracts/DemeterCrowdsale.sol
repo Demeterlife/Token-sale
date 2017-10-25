@@ -128,18 +128,25 @@ contract DemeterCrowdsale is
   }
 
   /**
-   * @dev Transfers the current balance to the owner and terminates the contracts (both crowdsale and token).
+   * @dev Closes the vault, terminates the contract and the token contract as well.
+   * Only allowed while the vault is open (not when refunds are enabled or the vault
+   * is already closed). Balance would be transferred to the owner, but it is
+   * always zero anyway.
    */
   function destroy() public onlyOwner {
+    vault.close();
     super.destroy();
-    DemeterToken(token).destroy();
+    DemeterToken(token).destroyAndSend(this);
   }
 
   /**
-   * @dev Transfers the current balance to _recipient and terminates the contracts.
-   * @param _recipient address that will receive the balance.
+   * @dev Closes the vault, terminates the contract and the token contract as well.
+   * Only allowed while the vault is open (not when refunds are enabled or the vault
+   * is already closed). Balance would be transferred to _recipient, but it is
+   * always zero anyway.
    */
   function destroyAndSend(address _recipient) public onlyOwner {
+    vault.close();
     super.destroyAndSend(_recipient);
     DemeterToken(token).destroyAndSend(_recipient);
   }
