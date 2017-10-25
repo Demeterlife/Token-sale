@@ -166,7 +166,7 @@ contract WhiteListCrowdsale is
    * @dev Adds up to 30 whitelisted investors. To be called one or more times
    * for initial whitelist loading.
    * @param _investors whitelisted investors
-   * @param _referralCodes investor referral codes as hex strings.
+   * @param _referralCodes keccak-256 hashes of corresponding investor referral codes.
    */
   function loadWhiteList(address[] _investors, bytes32[] _referralCodes) public onlyOwner
   {
