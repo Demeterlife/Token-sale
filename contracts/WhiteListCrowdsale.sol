@@ -37,7 +37,7 @@ contract WhiteListCrowdsale is
    * @dev Rate of bonus tokens received by a referring investor,
    * expressed as % of total bonus tokens issued for the purchase.
    */
-  uint8 constant REFERRAL_SHARE_RATE = 50;
+  uint8 public constant REFERRAL_SHARE_RATE = 50;
 
   /**
    * @dev Timestamp until which it is possible to add an investor to the whitelist.
