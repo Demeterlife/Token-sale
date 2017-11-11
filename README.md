@@ -12,7 +12,7 @@ Please see the [contracts/](contracts) directory.
 
 Contracts are written in [Solidity][solidity] and tested using [Truffle][truffle] and [testrpc][testrpc].
 
-### Depenencies
+### Dependencies
 
 ```
 # Install Truffle and testrpc packages globally:
