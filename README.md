@@ -8,9 +8,9 @@ This repository contains the contracts for the [Demeter.life][demetersite] corwd
 
 Please see the [contracts/](contracts) directory.
 
-## Develop
+## Development environment
 
-Contracts are written in [Solidity][solidity] and tested using [Truffle][truffle] and [testrpc][testrpc].
+Contracts are written in [Solidity][solidity] based on the [OpenZeppelin][openzeppelin] framework and tested using [Truffle][truffle] and [testrpc][testrpc].
 
 ### Dependencies
 
@@ -48,5 +48,6 @@ This crowdsale is divided into 5 phases
 
 [demetersite]: https://demeter.life
 [solidity]: https://solidity.readthedocs.io/en/develop/
+[openzeppelin]: https://openzeppelin.org/
 [truffle]: http://truffleframework.com/
 [testrpc]: https://github.com/ethereumjs/testrpc
