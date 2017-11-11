@@ -1,6 +1,6 @@
 # Demeter Crowdsale Contracts
 
-This repository contains the contracts for the [Demeter.life](demetersite) corwdsale.
+This repository contains the contracts for the [Demeter.life][demetersite] corwdsale.
 
 ![Demeter.life logo](demeter.png)
 
