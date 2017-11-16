@@ -165,7 +165,7 @@ contract WhiteListCrowdsale is
   /**
    * @dev Adds up to 30 whitelisted investors. To be called one or more times
    * for initial whitelist loading.
-   * @param _investors whitelisted investors
+   * @param _investors whitelisted investors.
    * @param _referralCodes keccak-256 hashes of corresponding investor referral codes.
    */
   function loadWhiteList(address[] _investors, bytes32[] _referralCodes) public onlyOwner
@@ -182,8 +182,8 @@ contract WhiteListCrowdsale is
 
   /**
    * @dev Adds a referred investor to the second-level whitelist.
-   * @param _referredInvestor whitelisted investor
-   * @param _referralCode investor's referral code
+   * @param _referredInvestor whitelisted investor.
+   * @param _referralCode investor's referral code.
    */
   function addReferredInvestor(string _referralCode, address _referredInvestor) public
   {
@@ -196,6 +196,23 @@ contract WhiteListCrowdsale is
 
     referrals[_referredInvestor] = referralCodes[referralCodeHash];
     ReferredInvestorAdded(_referralCode, _referredInvestor);
+  }
+
+  /**
+   * @dev Adds up to 30 referred investors. To be called one or more times
+   * for initial referred list loading.
+   * @param _referralCodes keccak-256 hashes of referral codes.
+   * @param _investors corresponding referred investors.
+   */
+  function loadReferredInvestors(bytes32[] _referralCodes, address[] _investors) public onlyOwner
+  {
+    require(_investors.length <= 30);
+    require(_investors.length == _referralCodes.length);
+
+    for (uint i = 0; i < _investors.length; i++)
+    {
+      referrals[_investors[i]] = referralCodes[_referralCodes[i]];
+    }
   }
 
   /**

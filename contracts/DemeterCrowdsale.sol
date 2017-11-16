@@ -27,6 +27,7 @@ import './zeppelin-solidity/crowdsale/RefundableCrowdsale.sol';
  * if the minimum goal is not reached, sent to a RefundVault from which they can
  * be withdrawn by the investors as a refund.
  * The minimum goal can be adjusted by the owner during the sale.
+ * The minimum amount that can be paid is 0.1 eth; anything less will be rejected.
  */
 contract DemeterCrowdsale is
   RefundableCrowdsale,
@@ -50,7 +51,7 @@ contract DemeterCrowdsale is
   /**
    * @dev Address to which the release tokens are credited.
    */
-  address constant public RELEASE_WALLET = 0x70323222694584c68BD5a29194bb72c248e715F7;
+  address constant public RELEASE_WALLET = 0x867D85437d27cA97e1EB574250efbba487aca637;
 
   /**
    * Portion of total tokens reserved for dev. team.
@@ -60,7 +61,7 @@ contract DemeterCrowdsale is
   /**
    * @dev Address to which the dev. tokens are credited.
    */
-  address constant public DEV_WALLET = 0x867D85437d27cA97e1EB574250efbba487aca637;
+  address constant public DEV_WALLET = 0x70323222694584c68BD5a29194bb72c248e715F7;
 
   /**
    * Portion of total tokens reserved for business dev.
@@ -70,7 +71,7 @@ contract DemeterCrowdsale is
   /**
    * @dev Address to which the business dev. tokens are credited.
    */
-  address constant public BIZDEV_WALLET = 0xdc47494e7B58E0C8845Ae0670F7647Bed621Eb18;
+  address constant public BIZDEV_WALLET = 0xE43053e265F04f690021735E02BBA559Cea681D6;
 
   /**
    * @dev Event fired whenever company tokens are issued for a purchase.
@@ -119,6 +120,7 @@ contract DemeterCrowdsale is
    * @param _beneficiary the investor that buys the tokens.
    */
   function buyTokens(address _beneficiary) public payable whenNotPaused {
+    require(msg.value >= 0.1 ether);
     // buys tokens (including referral or whitelist tokens) and
     // transfers them to _beneficiary.
     super.buyTokens(_beneficiary);

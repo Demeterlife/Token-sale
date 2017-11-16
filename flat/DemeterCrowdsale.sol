@@ -325,7 +325,7 @@ contract WhiteListCrowdsale is
   /**
    * @dev Adds up to 30 whitelisted investors. To be called one or more times
    * for initial whitelist loading.
-   * @param _investors whitelisted investors
+   * @param _investors whitelisted investors.
    * @param _referralCodes keccak-256 hashes of corresponding investor referral codes.
    */
   function loadWhiteList(address[] _investors, bytes32[] _referralCodes) public onlyOwner
@@ -342,8 +342,8 @@ contract WhiteListCrowdsale is
 
   /**
    * @dev Adds a referred investor to the second-level whitelist.
-   * @param _referredInvestor whitelisted investor
-   * @param _referralCode investor's referral code
+   * @param _referredInvestor whitelisted investor.
+   * @param _referralCode investor's referral code.
    */
   function addReferredInvestor(string _referralCode, address _referredInvestor) public
   {
@@ -356,6 +356,23 @@ contract WhiteListCrowdsale is
 
     referrals[_referredInvestor] = referralCodes[referralCodeHash];
     ReferredInvestorAdded(_referralCode, _referredInvestor);
+  }
+
+  /**
+   * @dev Adds up to 30 referred investors. To be called one or more times
+   * for initial referred list loading.
+   * @param _referralCodes keccak-256 hashes of referral codes.
+   * @param _investors corresponding referred investors.
+   */
+  function loadReferredInvestors(bytes32[] _referralCodes, address[] _investors) public onlyOwner
+  {
+    require(_investors.length <= 30);
+    require(_investors.length == _referralCodes.length);
+
+    for (uint i = 0; i < _investors.length; i++)
+    {
+      referrals[_investors[i]] = referralCodes[_referralCodes[i]];
+    }
   }
 
   /**
@@ -600,7 +617,7 @@ contract DemeterCrowdsale is
   /**
    * @dev Address to which the release tokens are credited.
    */
-  address constant public RELEASE_WALLET = 0x70323222694584c68BD5a29194bb72c248e715F7;
+  address constant public RELEASE_WALLET = 0x867D85437d27cA97e1EB574250efbba487aca637;
 
   /**
    * Portion of total tokens reserved for dev. team.
@@ -610,7 +627,7 @@ contract DemeterCrowdsale is
   /**
    * @dev Address to which the dev. tokens are credited.
    */
-  address constant public DEV_WALLET = 0x867D85437d27cA97e1EB574250efbba487aca637;
+  address constant public DEV_WALLET = 0x70323222694584c68BD5a29194bb72c248e715F7;
 
   /**
    * Portion of total tokens reserved for business dev.
@@ -620,7 +637,7 @@ contract DemeterCrowdsale is
   /**
    * @dev Address to which the business dev. tokens are credited.
    */
-  address constant public BIZDEV_WALLET = 0xdc47494e7B58E0C8845Ae0670F7647Bed621Eb18;
+  address constant public BIZDEV_WALLET = 0xE43053e265F04f690021735E02BBA559Cea681D6;
 
   /**
    * @dev Event fired whenever company tokens are issued for a purchase.
@@ -669,6 +686,7 @@ contract DemeterCrowdsale is
    * @param _beneficiary the investor that buys the tokens.
    */
   function buyTokens(address _beneficiary) public payable whenNotPaused {
+    require(msg.value >= 0.1 ether);
     // buys tokens (including referral or whitelist tokens) and
     // transfers them to _beneficiary.
     super.buyTokens(_beneficiary);

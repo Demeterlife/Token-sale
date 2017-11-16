@@ -23,13 +23,13 @@ contract('DemeterCrowdsale', function ([
   owner
 ]) {
 
-  const RATE = new BigNumber(1000);
+  const RATE = new BigNumber(3000);
   const CAP = ether(20);
   const LESS_THAN_CAP = ether(18);
   const GOAL = ether(10);
   const LESS_THAN_GOAL = ether(8);
 
-  const INVESTED_AMOUNT = ether(3);
+  const INVESTED_AMOUNT = ether(1);
   const EXPECTED_TOKEN_AMOUNT = RATE.mul(INVESTED_AMOUNT);
 
   const PERC_TOKENS_TO_INVESTOR = 30;
@@ -40,9 +40,9 @@ contract('DemeterCrowdsale', function ([
   const PERC_TOKENS_TO_BIZDEV = 25;
 
   const WALLET = "0x18061456803b185583C84780C55e667BC7B71F7D".toLowerCase(); // multi-sig wallet
-  const RELEASE_WALLET = "0x70323222694584c68BD5a29194bb72c248e715F7".toLowerCase();
-  const DEV_WALLET = "0x867D85437d27cA97e1EB574250efbba487aca637".toLowerCase();
-  const BIZDEV_WALLET = "0xdc47494e7B58E0C8845Ae0670F7647Bed621Eb18".toLowerCase();
+  const RELEASE_WALLET = "0x867D85437d27cA97e1EB574250efbba487aca637".toLowerCase();
+  const DEV_WALLET = "0x70323222694584c68BD5a29194bb72c248e715F7".toLowerCase();
+  const BIZDEV_WALLET = "0xE43053e265F04f690021735E02BBA559Cea681D6".toLowerCase();
 
   const REFCODE1 = "REFCODE1";
   const REFCODE2 = "REFCODE2";
